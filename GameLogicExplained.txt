@@ -1,0 +1,14 @@
+Higher Card Wins (simple version)
+
+    There are N players
+
+    Each turn:
+        Each player draws one card
+        Cards are compared
+        The player with the highest card wins the round
+
+    The game ends when:
+        The deck is empty
+        
+    The winner:
+        Player who won the most rounds

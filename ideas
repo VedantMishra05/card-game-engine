@@ -1,0 +1,19 @@
+squid game .. pick joker card game ..
+war, black jack, poker, trick-taking rules, custom ranking system
+scoreboard .. 
+🔁 Event-driven game flow
+
+
+🎮 Real player decisions
+🧠 AI players
+🌐 Multiplayer architecture
+🧩 Adding a second card game cleanly
+🖥️ UI integration strategy
+
+
+generics madness
+inheritance trees
+event systems yet
+
+
+- Round rule ko interface banana, taki reuse kar sake..
