@@ -33,12 +33,16 @@ public class Game {
     public void play() {
         setup();
 
-        while(!deck.isEmpty()) {
+        while(canPlayRound()) {
             playRound();
         }
 
         state = GameState.FINISHED;
         announceFinalWinner();
+    }
+
+    public boolean canPlayRound() {
+        return deck.remainingCards() >= players.size();
     }
 
     
@@ -48,8 +52,6 @@ public class Game {
         Map<Player, Card> playedCards = new LinkedHashMap<>();
 
         for(Player player: players) {
-            if(deck.isEmpty()) break;
-
             Card drawn = deck.draw();
             player.receiveCard(drawn);
 
@@ -57,13 +59,15 @@ public class Game {
             playedCards.put(player, played);
         }
 
-        Player roundWinner = roundRule.determineWinner(playedCards);
-        roundWinner.increaseScore();
+        List<Player> roundWinners = roundRule.determineWinner(playedCards);
+        roundWinners.forEach((p) -> p.increaseScore());
 
         System.out.println("Played Cards: ");
         playedCards.forEach((p, c) ->  System.out.println(p.getName() + " played " + c));
 
-        System.out.println("\nRound winner: " + roundWinner.getName());
+        System.out.print("\nRound winner: ");
+        roundWinners.forEach((p) -> System.out.print(p.getName() + "  "));
+        System.out.println();
         System.out.println();
     }
     

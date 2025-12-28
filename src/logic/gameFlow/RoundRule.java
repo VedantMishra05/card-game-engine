@@ -1,8 +1,10 @@
 package logic.gameFlow;
 import engine.Card;
 import engine.Player;
+
+import java.util.List;
 import java.util.Map;
 
 public interface RoundRule {
-    Player determineWinner(Map<Player, Card> playedCards);
+    List<Player> determineWinner(Map<Player, Card> playedCards);
 }

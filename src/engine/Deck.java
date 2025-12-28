@@ -42,6 +42,10 @@ public class Deck {
     public int size() {
         return cards.size();
     }
+    
+    public int remainingCards() {
+        return cards.size();
+    }
 
     // public static void main(String[] args) {
         // Deck deck1 = new Deck();
