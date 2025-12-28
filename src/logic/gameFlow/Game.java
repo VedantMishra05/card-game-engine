@@ -75,7 +75,7 @@ public class Game {
         Player winner = Collections.max(players, Comparator.comparingInt(Player::getScore));
 
         System.out.println("GAME OVER");
-        System.out.println("Winner: " + winner.getName());
+        System.out.println("The final winner is ->  " + winner.getName());
         System.out.println();
     }
 }
