@@ -1,14 +1,19 @@
 squid game .. pick joker card game ..
 war, black jack, poker, trick-taking rules, custom ranking system
 scoreboard .. 
+
+
 🔁 Event-driven game flow
-
-
 🎮 Real player decisions
 🧠 AI players
 🌐 Multiplayer architecture
 🧩 Adding a second card game cleanly
 🖥️ UI integration strategy
+Introduce a Round object (stores playedCards + winners)
+Event system (RoundStarted, CardPlayed, RoundEnded)
+HumanPlayer vs AIPlayer abstraction
+Second game mode (e.g. War) to validate architecture
+Unit tests for rules (very valuable)
 
 
 generics madness

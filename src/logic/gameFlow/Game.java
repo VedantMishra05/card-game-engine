@@ -1,7 +1,5 @@
 package logic.gameFlow;
 
-import java.util.Comparator;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,9 +7,11 @@ import java.util.Map;
 import engine.Card;
 import engine.Deck;
 import engine.Player;
+import engine.util.Sleep;
 import logic.GameState;
 
 public class Game {
+
     private final List<Player> players;
     private final Deck deck;
     private final RoundRule roundRule;
@@ -48,6 +48,7 @@ public class Game {
     
     private void playRound() {
         if(state != GameState.IN_PROGRESS) throw new IllegalStateException("Game not in progress.");
+        Sleep.sleep(1000);
 
         Map<Player, Card> playedCards = new LinkedHashMap<>();
 
@@ -72,10 +73,17 @@ public class Game {
     }
     
     private void announceFinalWinner() {
-        Player winner = Collections.max(players, Comparator.comparingInt(Player::getScore));
+        int highestScore = players.stream().mapToInt(Player::getScore).max().orElse(0);
+        List<Player> finalWinnerList = players.stream().filter(p -> p.getScore() == highestScore).toList();
 
-        System.out.println("GAME OVER");
-        System.out.println("The final winner is ->  " + winner.getName());
-        System.out.println();
+        if(finalWinnerList.size() == 1) {
+            System.out.println("GAME OVER");
+            System.out.println("The final winner is ->  " + finalWinnerList.get(0).getName());
+            System.out.println();
+        } else {
+            System.out.print("Game tied between -> ");
+            finalWinnerList.forEach(p -> System.out.print(p.getName() + " "));
+            System.out.println();
+        }
     }
 }

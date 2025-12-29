@@ -7,23 +7,15 @@ import java.util.*;
 public class Deck {
     private final List<Card> cards = new ArrayList<>();
 
-    public Deck() {
+    public Deck(int shuffleCount) {
         for(Suit suit: Suit.values()) {
             for(Rank rank: Rank.values()) {
                 cards.add(new Card(suit, rank));
             }
         }
-        Collections.shuffle(cards);
-        Collections.shuffle(cards);
-        Collections.shuffle(cards);
-        Collections.shuffle(cards);
-        Collections.shuffle(cards);
-        Collections.shuffle(cards);
-        Collections.shuffle(cards);
-        Collections.shuffle(cards);
-        Collections.shuffle(cards);
-        Collections.shuffle(cards);
-        Collections.shuffle(cards);
+        for(int i = 0; i < shuffleCount; i++) {
+            Collections.shuffle(cards);
+        }
     }
 
     public void shuffle() {
