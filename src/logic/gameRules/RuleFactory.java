@@ -19,14 +19,14 @@ public class RuleFactory {
 
     // print for user's choice
     public static void displayRules() {
-        System.out.println("\n\n        Available Game modes            ");
+        System.out.println("\n\n        Available Game modes            \n");
         ruleOptions.forEach((key, value) -> System.out.println(key + ". " + value));
     }
 
     public static int getUserChoice(Scanner sc) {
         int choice;
         while(true) {
-            System.out.print("\nEnter rule number: ");
+            System.out.print("\nEnter Game mode number: ");
             if (!sc.hasNextInt()) {
                 System.out.println("Invalid input. Enter a number.");
                 sc.next();
@@ -34,7 +34,7 @@ public class RuleFactory {
             }
             choice = sc.nextInt();
             if (!ruleOptions.containsKey(choice)) {
-                System.out.println("Please enter a valid rule number.");
+                System.out.println("Please enter a valid game mode number.");
                 continue;
             }
             break;

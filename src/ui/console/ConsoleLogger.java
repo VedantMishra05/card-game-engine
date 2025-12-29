@@ -27,7 +27,7 @@ public class ConsoleLogger {
                 System.out.print(event.winners().get(0).getName() + " ");
                 System.out.println();
             } else {
-                System.out.print("\nRound winners are : ");
+                System.out.print("\nRound tied between : ");
                 event.winners().forEach(p -> System.out.print(p.getName() + " "));
                 System.out.println();
             }
