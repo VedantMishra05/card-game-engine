@@ -16,9 +16,47 @@ Second game mode (e.g. War) to validate architecture
 Unit tests for rules (very valuable)
 
 
+What you unlocked (this is huge)
+With this design, you can now
+🎨 UI Animations
+Pause after CardPlayedEvent
+Animate card movement
+Resume game
+🌐 Multiplayer
+Broadcast events over network
+Sync remote clients
+🎥 Replays
+Record events
+Replay them later
+🧪 Testing
+Assert events instead of console output
+🤖 AI
+AI listens to events and reacts
+
+
+Dynamic registration (very advanced)
+Later, you could even:
+Scan the rule package
+Automatically register all RoundRule implementations
+Populate a menu dynamically
+No need to modify App at all when adding new rules.
+
+
 generics madness
 inheritance trees
 event systems yet
 
 
-- Round rule ko interface banana, taki reuse kar sake..
+What I recommend next (best order)
+Extract a Round object
+Add delay support (async events)
+Add HumanPlayer input via events
+Add second game mode to stress test events
+If you want, next I can:
+Refactor your Game fully to event-only
+Add async delay handling (without threads mess)
+Design player input as events
+
+I want to understand the flow of the program, like when game starts what part part of code plays what role, what it calls and how it affects the outcome ( a dry run or debugging of the project flow if you will )
+
+Learn about all of probablity concepts around this game to design custom algorithms.

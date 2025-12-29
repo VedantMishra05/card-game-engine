@@ -1,11 +1,13 @@
 import java.util.List;
 import java.util.Scanner;
 
-import engine.Deck;
 import engine.Player;
 import engine.util.Sleep;
+import logic.events.EventBus;
 import logic.gameFlow.Game;
-import logic.rule.HigherCardRule;
+import logic.gameFlow.RoundRule;
+import logic.gameRules.RuleFactory;
+import ui.console.ConsoleLogger;
 
 public class App {
 
@@ -33,7 +35,7 @@ public class App {
         }
         
         System.out.println();
-        System.out.println("Preparing to shuffle the deck...");
+        System.out.println("........Preparing to shuffle the deck........");
         System.out.println();
         Sleep.sleep(500);
         System.out.println("Shuffling deck " + shuffleCount + " times...");
@@ -45,21 +47,38 @@ public class App {
     
     
     public static void main(String[] args) throws Exception {
+
         Scanner sc = new Scanner(System.in);
+
+        // Invoking infrastructure...
+        EventBus eventBus = new EventBus();
+
+        // Event Listners...
+        new ConsoleLogger(eventBus);
+
+        // Input for which game mode..
+        RuleFactory.displayRules();
+        int ruleChoice = RuleFactory.getUserChoice(sc);
+        RoundRule roundRule = RuleFactory.createRule(ruleChoice);
+
+        // User input for number of shuffles
         int shuffleCount = shuffleCount(sc);
-        Deck deck = new Deck(shuffleCount);
-        Player player1 = new Player("Vedant");
-        Player player2 = new Player("Ashish");
-        Player player3 = new Player("Sakshi");
-        Player player4 = new Player("Kappa");
-        Player player5 = new Player("Ritwik");
-        Player player6 = new Player("Abhay");
-        Player player7 = new Player("Harsh");
+
+        List<Player> players = List.of(
+            new Player("Vedant"),
+            new Player("Sakshi"),
+            new Player("Ashish"),
+            new Player("Kappa"),
+            new Player("Ritwik"), 
+            new Player("Abhay"),
+            new Player("Harsh")
+        );
         
         Game game = new Game(
-            List.of(player1, player2, player3, player4, player5, player6, player7),
-            deck,
-            new HigherCardRule()
+            players,
+            shuffleCount,
+            roundRule, 
+            eventBus
         );
         
         game.play();

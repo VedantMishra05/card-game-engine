@@ -38,17 +38,4 @@ public class Deck {
     public int remainingCards() {
         return cards.size();
     }
-
-    // public static void main(String[] args) {
-        // Deck deck1 = new Deck();
-        // Card firstDraw = deck1.draw();
-        // Card secDraw = deck1.draw();
-        // Card thirdDraw = deck1.draw();
-        // Card fourthDraw = deck1.draw();
-        // System.out.println(deck1.size());
-    //     System.out.println(firstDraw.getCardDetails());
-    //     System.out.println(secDraw.getCardDetails());
-    //     System.out.println(thirdDraw.getCardDetails());
-    //     System.out.println(fourthDraw.getCardDetails());
-    // }
 }

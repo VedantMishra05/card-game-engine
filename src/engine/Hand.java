@@ -32,15 +32,6 @@ public class Hand {
         }
     }
 
-    // public void getDetails() {
-    //     for(Card card: cardsInHand) {
-    //         System.out.println(card.toString());
-    //         System.out.println();
-    //     }
-    // }
-
-
-
     public List<Card> getCards() {
         return Collections.unmodifiableList(cardsInHand);
     }

@@ -7,21 +7,27 @@ import java.util.Map;
 import engine.Card;
 import engine.Deck;
 import engine.Player;
-import engine.util.Sleep;
 import logic.GameState;
+import logic.events.EventBus;
+import logic.events.eventTypes.CardPlayedEvent;
+import logic.events.eventTypes.GameEndedEvent;
+import logic.events.eventTypes.RoundEndedEvent;
+import logic.events.eventTypes.RoundStartedEvent;
 
 public class Game {
 
     private final List<Player> players;
     private final Deck deck;
     private final RoundRule roundRule;
+    private final EventBus eventBus;
 
     private GameState state = GameState.SETUP;
 
-    public Game(List<Player> players, Deck deck, RoundRule roundRule) {
+    public Game(List<Player> players, int shuffleCount, RoundRule roundRule, EventBus eventBus) {
         this.players = players;
-        this.deck = deck;
+        this.deck = new Deck(shuffleCount);
         this.roundRule = roundRule;
+        this.eventBus = eventBus;
     }
 
     public void setup() {
@@ -38,7 +44,7 @@ public class Game {
         }
 
         state = GameState.FINISHED;
-        announceFinalWinner();
+        endRound();
     }
 
     public boolean canPlayRound() {
@@ -48,7 +54,8 @@ public class Game {
     
     private void playRound() {
         if(state != GameState.IN_PROGRESS) throw new IllegalStateException("Game not in progress.");
-        Sleep.sleep(1000);
+
+        eventBus.publish(new RoundStartedEvent());
 
         Map<Player, Card> playedCards = new LinkedHashMap<>();
 
@@ -58,32 +65,20 @@ public class Game {
 
             Card played = player.playCard(drawn);
             playedCards.put(player, played);
+
+            eventBus.publish(new CardPlayedEvent(player, played));
         }
 
         List<Player> roundWinners = roundRule.determineWinner(playedCards);
-        roundWinners.forEach((p) -> p.increaseScore());
+        roundWinners.forEach(Player::increaseScore);
 
-        System.out.println("Played Cards: ");
-        playedCards.forEach((p, c) ->  System.out.println(p.getName() + " played " + c));
-
-        System.out.print("\nRound winner: ");
-        roundWinners.forEach((p) -> System.out.print(p.getName() + "  "));
-        System.out.println();
-        System.out.println();
+        eventBus.publish(new RoundEndedEvent(playedCards, roundWinners));
     }
     
-    private void announceFinalWinner() {
+    private void endRound() {
         int highestScore = players.stream().mapToInt(Player::getScore).max().orElse(0);
-        List<Player> finalWinnerList = players.stream().filter(p -> p.getScore() == highestScore).toList();
+        List<Player> finalWinners = players.stream().filter(p -> p.getScore() == highestScore).toList();
 
-        if(finalWinnerList.size() == 1) {
-            System.out.println("GAME OVER");
-            System.out.println("The final winner is ->  " + finalWinnerList.get(0).getName());
-            System.out.println();
-        } else {
-            System.out.print("Game tied between -> ");
-            finalWinnerList.forEach(p -> System.out.print(p.getName() + " "));
-            System.out.println();
-        }
+        eventBus.publish(new GameEndedEvent(finalWinners));
     }
 }
