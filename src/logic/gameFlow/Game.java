@@ -1,18 +1,15 @@
 package logic.gameFlow;
 
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import engine.Card;
 import engine.Deck;
 import engine.Player;
 import logic.GameState;
 import logic.events.EventBus;
-import logic.events.eventTypes.CardPlayedEvent;
 import logic.events.eventTypes.GameEndedEvent;
+import logic.events.eventTypes.GameStartedEvent;
 import logic.events.eventTypes.RoundEndedEvent;
-import logic.events.eventTypes.RoundStartedEvent;
 
 public class Game {
 
@@ -23,62 +20,72 @@ public class Game {
 
     private GameState state = GameState.SETUP;
 
+    private int roundNumber = 1;
+    private Round currentRound;
+
     public Game(List<Player> players, int shuffleCount, RoundRule roundRule, EventBus eventBus) {
         this.players = players;
         this.deck = new Deck(shuffleCount);
         this.roundRule = roundRule;
         this.eventBus = eventBus;
+
+        registerListners();
     }
 
-    public void setup() {
-        if(state != GameState.SETUP) throw new IllegalStateException("Game already started!");
+    private void registerListners() {
+        eventBus.subscribe(RoundEndedEvent.class, event -> {
+            if(state == GameState.IN_PROGRESS) {
+                startNextRound();
+            }
+        });
+    }
+
+    public void start() {
+        if(state != GameState.SETUP) throw new IllegalStateException("Game already started !!");
+
         state = GameState.IN_PROGRESS;
+        eventBus.publish(new GameStartedEvent());
+
+        startNextRound();
     }
 
-    // Main flow of the game yahi hai.. saare games pe chalega..
-    public void play() {
-        setup();
-
-        while(canPlayRound()) {
-            playRound();
+    private void startNextRound() {
+        if(!canPlayRound()) {
+            endGame();
+            return;
         }
-
-        state = GameState.FINISHED;
-        endRound();
-    }
-
-    public boolean canPlayRound() {
-        return deck.remainingCards() >= players.size();
-    }
-
-    
-    private void playRound() {
-        if(state != GameState.IN_PROGRESS) throw new IllegalStateException("Game not in progress.");
-
-        eventBus.publish(new RoundStartedEvent());
-
-        Map<Player, Card> playedCards = new LinkedHashMap<>();
 
         for(Player player: players) {
             Card drawn = deck.draw();
             player.receiveCard(drawn);
-
-            Card played = player.playCard(drawn);
-            playedCards.put(player, played);
-
-            eventBus.publish(new CardPlayedEvent(player, played));
         }
 
-        List<Player> roundWinners = roundRule.determineWinner(playedCards);
-        roundWinners.forEach(Player::increaseScore);
+        currentRound = new Round(roundNumber++, players, roundRule, eventBus);
+        currentRound.start();
 
-        eventBus.publish(new RoundEndedEvent(playedCards, roundWinners));
+        autoPlayROund();
+    }
+
+    private void autoPlayROund() {
+        for(Player player: players) {
+            Card card = player.showHands().get(0);
+            player.playCard(card);
+            currentRound.playCard(player, card);
+        }
+    }
+
+    private boolean canPlayRound() {
+        return deck.remainingCards() >= players.size();
     }
     
-    private void endRound() {
+    private void endGame() {
+        state = GameState.FINISHED;
+
         int highestScore = players.stream().mapToInt(Player::getScore).max().orElse(0);
         List<Player> finalWinners = players.stream().filter(p -> p.getScore() == highestScore).toList();
 
         eventBus.publish(new GameEndedEvent(finalWinners));
     }
+
+    public Round getRound() { return currentRound; }
 }

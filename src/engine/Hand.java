@@ -6,7 +6,12 @@ import java.util.List;
 
 public class Hand {
     private static final int HAND_SIZE_LIMIT = 5;
+    // private final int handSize;
     private final List<Card> cardsInHand = new ArrayList<>();
+
+    public Hand (int handSize) {
+        // this.handSize = handSize;
+    }
 
     public void addCard(Card card) {
         if(cardsInHand.size() >= HAND_SIZE_LIMIT) {throw new IllegalStateException("Hand is full!");}

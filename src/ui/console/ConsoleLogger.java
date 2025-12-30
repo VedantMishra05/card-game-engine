@@ -4,18 +4,21 @@ import engine.util.Sleep;
 import logic.events.EventBus;
 import logic.events.eventTypes.CardPlayedEvent;
 import logic.events.eventTypes.GameEndedEvent;
+import logic.events.eventTypes.GameStartedEvent;
 import logic.events.eventTypes.RoundEndedEvent;
 import logic.events.eventTypes.RoundStartedEvent;
 
 public class ConsoleLogger {
     public ConsoleLogger(EventBus eventBus) {
+
         eventBus.subscribe(CardPlayedEvent.class, event -> {
             Sleep.sleep(500);
             System.out.println(event.player().getName() + " played " + event.card());
         });
 
+
         eventBus.subscribe(RoundStartedEvent.class, event -> {
-            System.out.println("\n------------  Round Starts ------------\n");
+            System.out.println("\n------------  Round "+ event.roundNumber() +" Starts ------------\n");
         });
         
         eventBus.subscribe(RoundEndedEvent.class, event -> {
@@ -31,18 +34,25 @@ public class ConsoleLogger {
                 event.winners().forEach(p -> System.out.print(p.getName() + " "));
                 System.out.println();
             }
-            System.out.println("\n------------  Round Ended ------------");
+            System.out.println("\n------------  Round " + event.roundNumber() + " Ended ------------");
             System.out.println();
             Sleep.sleep(1000);
         });
 
+
+        eventBus.subscribe(GameStartedEvent.class, event -> {
+            System.out.println("------------ GAME Started ------------");
+        });
+
         eventBus.subscribe(GameEndedEvent.class, event -> {
             System.out.println("------------ GAME OVER ------------");
-            System.out.print("\nWinner : ");
-            event.finalWinnerList().forEach(p ->
-                System.out.print(p.getName() + " ")
-            );
-            System.out.println("\n");
+            if(event.finalWinnerList().size() == 1) {
+                System.out.print("\nWinner : " + event.finalWinnerList().get(0).getName());
+            } else {
+                System.out.print("\nGame tied between : ");
+                event.finalWinnerList().forEach(p -> System.out.print(p.getName() + " "));
+            }
+            System.out.println("\n\n    ------------ ---- ---- ------------\n");
         });
     }
 }

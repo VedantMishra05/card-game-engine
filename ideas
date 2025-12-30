@@ -3,6 +3,9 @@ war, black jack, poker, trick-taking rules, custom ranking system
 scoreboard .. 
 
 
+Hand ka abhii kahi pe use nai ho raha hai.. Baad me deals me hand size decide karenge..
+
+
 🔁 Event-driven game flow
 🎮 Real player decisions
 🧠 AI players
@@ -60,3 +63,14 @@ Design player input as events
 I want to understand the flow of the program, like when game starts what part part of code plays what role, what it calls and how it affects the outcome ( a dry run or debugging of the project flow if you will )
 
 Learn about all of probablity concepts around this game to design custom algorithms.
+
+
+After all 5 improvements, your system becomes:
+Layer	Responsibility
+App	Wiring
+Game	Orchestration
+Round	Execution
+Rule	Evaluation
+Events	Communication
+Config	Description
+UI	Presentation

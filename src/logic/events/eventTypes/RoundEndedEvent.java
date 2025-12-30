@@ -7,6 +7,6 @@ import engine.Card;
 import engine.Player;
 import logic.events.GameEvent;
 
-public record RoundEndedEvent(Map<Player, Card> playedCards, List<Player> winners) implements GameEvent{
+public record RoundEndedEvent(int roundNumber, Map<Player, Card> playedCards, List<Player> winners) implements GameEvent{
 
 }

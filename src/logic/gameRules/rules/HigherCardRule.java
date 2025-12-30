@@ -18,11 +18,11 @@ public class HigherCardRule implements RoundRule{
 
         for(Map.Entry<Player, Card> entry: playedCards.entrySet()) {
             Rank currentRank = entry.getValue().getRank();
-            if(highestRank == null || currentRank.ordinal() > highestRank.ordinal()) {
+            if(highestRank == null || currentRank.getValue() > highestRank.getValue()) {
                 highestRank = currentRank;
                 listOfWinners.clear();
                 listOfWinners.add(entry.getKey());
-            } else if(currentRank.ordinal() == highestRank.ordinal()) {
+            } else if(currentRank.getValue() == highestRank.getValue()) {
                 listOfWinners.add(entry.getKey());
             }
         }

@@ -5,15 +5,11 @@ import java.util.*;
 
 public class Player {
     private final String name;
-    private Hand hand = new Hand();
+    private Hand hand = new Hand(1);
     private int score = 0;
 
     public Player(String name) {
         this.name = name;
-    }
-    public Player(String name, Deck deck, int numberOfCards) {
-        this.name = name;
-
     }
 
     public void receiveCard(Card card) {

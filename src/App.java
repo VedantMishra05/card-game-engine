@@ -17,7 +17,8 @@ public class App {
 
         int shuffleCount;
         while(true) {
-            System.out.print("\nHow many times do you want to shuffle ( " + MIN_SHUFFLES + " - " + MAX_SHUFFLES +" ) : ");
+            System.out.println("\n-----  -----  -----  -----  ----- -----  -----\n\n");
+            System.out.print("How many times do you want to shuffle ( " + MIN_SHUFFLES + " - " + MAX_SHUFFLES +" ) : ");
             if(!sc.hasNextInt()) {
                 System.out.println("Invalid input. Please enter a number.");
                 sc.next();
@@ -34,12 +35,12 @@ public class App {
             break;
         }
         
-        System.out.println();
+        System.out.println("\n-----  -----  -----  -----  ----- -----  -----\n\n");
         System.out.println("........Preparing to shuffle the deck........");
         System.out.println();
         Sleep.sleep(500);
         System.out.println("Shuffling deck " + shuffleCount + " times...");
-        System.out.println();
+        System.out.println("\n-----  -----  -----  -----  ----- -----  -----\n\n");
         Sleep.sleep(1000);
 
         return shuffleCount;
@@ -80,8 +81,7 @@ public class App {
             roundRule, 
             eventBus
         );
-        
-        game.play();
+        game.start();
         
         sc.close();
     }
