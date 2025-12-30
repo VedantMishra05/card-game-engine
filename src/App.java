@@ -3,10 +3,11 @@ import java.util.Scanner;
 
 import engine.Player;
 import engine.util.Sleep;
+import logic.config.GameConfig;
+import logic.config.RoundRuleType;
+import logic.config.userInput.RuleFactory;
 import logic.events.EventBus;
 import logic.gameFlow.Game;
-import logic.gameFlow.RoundRule;
-import logic.gameRules.RuleFactory;
 import ui.console.ConsoleLogger;
 
 public class App {
@@ -59,8 +60,13 @@ public class App {
 
         // Input for which game mode..
         RuleFactory.displayRules();
-        int ruleChoice = RuleFactory.getUserChoice(sc);
-        RoundRule roundRule = RuleFactory.createRule(ruleChoice);
+        RoundRuleType roundRuleType = RuleFactory.getUserChoice(sc);
+        // RoundRule roundRule = RuleFactory.createRule(ruleChoice);
+
+        // config
+        GameConfig config = GameConfig.builder().
+            roundRuleType(roundRuleType).
+            build();
 
         // User input for number of shuffles
         int shuffleCount = shuffleCount(sc);
@@ -78,7 +84,7 @@ public class App {
         Game game = new Game(
             players,
             shuffleCount,
-            roundRule, 
+            config, 
             eventBus
         );
         game.start();

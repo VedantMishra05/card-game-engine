@@ -1,12 +1,10 @@
-package logic.gameRules;
+package logic.config.userInput;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-import logic.gameFlow.RoundRule;
-import logic.gameRules.rules.HigherCardRule;
-import logic.gameRules.rules.LowerCardRule;
+import logic.config.RoundRuleType;
 
 public class RuleFactory {
 
@@ -15,6 +13,7 @@ public class RuleFactory {
     static {
         ruleOptions.put(1, "Higher Card Wins");
         ruleOptions.put(2, "Lower Card Wins");
+        ruleOptions.put(3, "War");
     }
 
     // print for user's choice
@@ -24,7 +23,7 @@ public class RuleFactory {
         System.out.println("\n-----  -----  -----  -----  ----- -----  -----\n\n");
     }
 
-    public static int getUserChoice(Scanner sc) {
+    public static RoundRuleType getUserChoice(Scanner sc) {
         int choice;
         while(true) {
             System.out.print("Enter Game mode number: ");
@@ -34,9 +33,10 @@ public class RuleFactory {
                 continue;
             }
             choice = sc.nextInt();
-            if (!ruleOptions.containsKey(choice)) {
+            try {
+                return RoundRuleType.getType(choice);
+            } catch(IllegalArgumentException e) {
                 System.out.println("Please enter a valid game mode number.");
-                continue;
             }
             break;
         }
@@ -44,15 +44,6 @@ public class RuleFactory {
         System.out.println("\n-----  -----  -----  -----  ----- -----  -----\n\n");
         System.out.println("\n!!!        LET'S PLAY A GAME OF " + ruleOptions.get(choice).toUpperCase() + "        !!!!");
         System.out.println("\n\n-----  -----  -----  -----  ----- -----  -----\n\n");
-        return choice;
-    }
-
-    // helper method to create rules
-    public static RoundRule createRule(int choice) {
-        return switch(choice) {
-            case 1 -> new HigherCardRule();
-            case 2 -> new LowerCardRule();
-            default -> throw new IllegalArgumentException("");
-        };
+        return RoundRuleType.HIGHER_CARD;
     }
 }

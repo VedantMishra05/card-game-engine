@@ -6,27 +6,31 @@ import engine.Card;
 import engine.Deck;
 import engine.Player;
 import logic.GameState;
+import logic.config.GameConfig;
+import logic.config.PlayMode;
 import logic.events.EventBus;
 import logic.events.eventTypes.GameEndedEvent;
 import logic.events.eventTypes.GameStartedEvent;
 import logic.events.eventTypes.RoundEndedEvent;
+import logic.gameRules.RuleResolver;
 
 public class Game {
 
     private final List<Player> players;
     private final Deck deck;
-    private final RoundRule roundRule;
+    private final GameConfig config;
     private final EventBus eventBus;
+    private final RuleResolver ruleResolver = new RuleResolver();
 
     private GameState state = GameState.SETUP;
 
     private int roundNumber = 1;
     private Round currentRound;
 
-    public Game(List<Player> players, int shuffleCount, RoundRule roundRule, EventBus eventBus) {
+    public Game(List<Player> players, int shuffleCount, GameConfig config, EventBus eventBus) {
         this.players = players;
         this.deck = new Deck(shuffleCount);
-        this.roundRule = roundRule;
+        this.config = config;
         this.eventBus = eventBus;
 
         registerListners();
@@ -60,10 +64,10 @@ public class Game {
             player.receiveCard(drawn);
         }
 
-        currentRound = new Round(roundNumber++, players, roundRule, eventBus);
+        currentRound = new Round(roundNumber++, players, ruleResolver.resolve(config), eventBus);
         currentRound.start();
 
-        autoPlayROund();
+        if(config.getPlayMode() == PlayMode.AUTO) autoPlayROund();
     }
 
     private void autoPlayROund() {
