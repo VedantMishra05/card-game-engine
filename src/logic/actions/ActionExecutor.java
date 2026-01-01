@@ -24,13 +24,18 @@ public class ActionExecutor {
 
         if(round == null || round.isFinished()) throw new IllegalStateException("No active round");
         
-        Player player = action.getPlayer();
-        if(!player.showHands().contains(action.getCard())) throw new IllegalStateException("Player does not have this card");
+        Player expectedPlayer = game.getCurrentTurnPlayer();
+        Player actingPlayer = action.getPlayer();
+        if(!actingPlayer.equals(expectedPlayer)) throw new IllegalStateException("It is not " + actingPlayer + "'s turn.");
+        if(!actingPlayer.showHands().contains(action.getCard())) throw new IllegalStateException("Player does not have this card");
 
         // Remove card from hand..
-        player.playCard(action.getCard());
+        actingPlayer.playCard(action.getCard());
 
         // Update round
-        round.playCard(player, action.getCard());
+        round.playCard(actingPlayer, action.getCard());
+
+        // advance turn
+        game.advanceTurn();
     }
 }

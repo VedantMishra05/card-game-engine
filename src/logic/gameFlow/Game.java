@@ -29,6 +29,7 @@ public class Game {
     private GameState state = GameState.SETUP;
 
     private int roundNumber = 1;
+    private int currentTurnIndex = 0;
     private Round currentRound;
 
     public Game(List<Player> players, int shuffleCount, GameConfig config, EventBus eventBus) {
@@ -73,6 +74,7 @@ public class Game {
         }
 
         currentRound = new Round(roundNumber++, players, ruleResolver.resolve(config), eventBus);
+        currentTurnIndex = 0;
         currentRound.start();
 
         if(config.getPlayMode() == PlayMode.AUTO) autoPlayROund();
@@ -101,4 +103,8 @@ public class Game {
 
     public Round getRound() { return currentRound; }
     public ActionExecutor getActionExecutor() { return actionExecutor; }
+    public Player getCurrentTurnPlayer() { return players.get(currentTurnIndex); }
+    public void advanceTurn() {
+        currentTurnIndex = (currentTurnIndex + 1) % players.size(); // shayad formula galat ho jaaye..
+    }
 }

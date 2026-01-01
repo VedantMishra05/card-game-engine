@@ -69,7 +69,7 @@ public class App {
         GameConfig config = GameConfig.builder().
             roundRuleType(roundRuleType).
             cardsPerRound(1).
-            playMode(PlayMode.MANUAL).
+            playMode(PlayMode.AUTO).
             build();
 
         // User input for number of shuffles
