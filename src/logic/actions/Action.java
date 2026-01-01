@@ -1,5 +1,5 @@
 package logic.actions;
 
-public class PlayerActions {
+public interface Action {
     
 }

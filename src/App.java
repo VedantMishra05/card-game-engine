@@ -4,10 +4,12 @@ import java.util.Scanner;
 import engine.Player;
 import engine.util.Sleep;
 import logic.config.GameConfig;
+import logic.config.PlayMode;
 import logic.config.RoundRuleType;
 import logic.config.userInput.RuleFactory;
 import logic.events.EventBus;
 import logic.gameFlow.Game;
+import ui.console.ConsoleController;
 import ui.console.ConsoleLogger;
 
 public class App {
@@ -66,6 +68,8 @@ public class App {
         // config
         GameConfig config = GameConfig.builder().
             roundRuleType(roundRuleType).
+            cardsPerRound(1).
+            playMode(PlayMode.MANUAL).
             build();
 
         // User input for number of shuffles
@@ -87,6 +91,11 @@ public class App {
             config, 
             eventBus
         );
+
+        if(config.getPlayMode() == PlayMode.MANUAL) {
+            new ConsoleController(game, eventBus);
+        }
+
         game.start();
         
         sc.close();

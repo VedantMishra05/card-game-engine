@@ -62,4 +62,8 @@ public class Round {
     public int getRoundNumber() {
         return roundNumber;
     }
+    
+    public List<Player> getPlayers() {
+        return players;
+    }
 }

@@ -6,6 +6,8 @@ import engine.Card;
 import engine.Deck;
 import engine.Player;
 import logic.GameState;
+import logic.actions.ActionExecutor;
+import logic.actions.actionTypes.PlayCardAction;
 import logic.config.GameConfig;
 import logic.config.PlayMode;
 import logic.events.EventBus;
@@ -20,7 +22,9 @@ public class Game {
     private final Deck deck;
     private final GameConfig config;
     private final EventBus eventBus;
+
     private final RuleResolver ruleResolver = new RuleResolver();
+    private final ActionExecutor actionExecutor;
 
     private GameState state = GameState.SETUP;
 
@@ -32,6 +36,7 @@ public class Game {
         this.deck = new Deck(shuffleCount);
         this.config = config;
         this.eventBus = eventBus;
+        this.actionExecutor = new ActionExecutor(this);
 
         registerListners();
     }
@@ -59,9 +64,12 @@ public class Game {
             return;
         }
 
-        for(Player player: players) {
-            Card drawn = deck.draw();
-            player.receiveCard(drawn);
+        int cardsPerRound = config.getCardsPerRound();
+        for(int i = 0; i < cardsPerRound; i++) {
+            for(Player player: players) {
+                Card drawn = deck.draw();
+                player.receiveCard(drawn);
+            }
         }
 
         currentRound = new Round(roundNumber++, players, ruleResolver.resolve(config), eventBus);
@@ -73,8 +81,8 @@ public class Game {
     private void autoPlayROund() {
         for(Player player: players) {
             Card card = player.showHands().get(0);
-            player.playCard(card);
-            currentRound.playCard(player, card);
+            
+            actionExecutor.execute(new PlayCardAction(player, card));
         }
     }
 
@@ -92,4 +100,5 @@ public class Game {
     }
 
     public Round getRound() { return currentRound; }
+    public ActionExecutor getActionExecutor() { return actionExecutor; }
 }
