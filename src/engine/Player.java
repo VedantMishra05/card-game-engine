@@ -33,6 +33,12 @@ public class Player {
         score++;
     }
 
+    public Card playTopCard() {
+        Card card = hand.getCards().get(0);
+        hand.removeCard(card);
+        return card;
+    }
+
     public Hand getHand() { return hand; }
     public String getName() { return name; }
     public int getScore() { return score; }

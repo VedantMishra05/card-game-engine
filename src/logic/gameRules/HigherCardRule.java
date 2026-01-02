@@ -1,4 +1,4 @@
-package logic.gameRules.rules;
+package logic.gameRules;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -41,6 +41,8 @@ public class Hand {
         }
     }
 
+    public int size() { return cardsInHand.size(); }
+
     public List<Card> getCards() {
         return Collections.unmodifiableList(cardsInHand);
     }

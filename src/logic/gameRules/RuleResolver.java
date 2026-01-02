@@ -3,9 +3,7 @@ package logic.gameRules;
 import logic.config.GameConfig;
 import logic.config.RoundRuleType;
 import logic.gameFlow.RoundRule;
-import logic.gameRules.rules.HigherCardRule;
-import logic.gameRules.rules.LowerCardRule;
-import logic.gameRules.rules.WarRule;
+import logic.gameRules.War.WarRule;
 
 public class RuleResolver {
     public RoundRule resolve(GameConfig config) {

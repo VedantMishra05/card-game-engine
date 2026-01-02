@@ -12,7 +12,7 @@ public class ConsoleLogger {
     public ConsoleLogger(EventBus eventBus) {
 
         eventBus.subscribe(CardPlayedEvent.class, event -> {
-            Sleep.sleep(500);
+            Sleep.sleep(200);
             System.out.println(event.player().getName() + " played " + event.card());
         });
 
