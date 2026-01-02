@@ -22,7 +22,7 @@ public class ConsoleController {
     }
 
     public void onRoundStarted(RoundStartedEvent event) {
-        System.out.println("----- Manual Mode -----");
+        // System.out.println("----- Manual Mode -----");
         System.out.println("- Play your cards -");
         
         for(Player players: game.getRound().getPlayers()) {

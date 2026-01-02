@@ -1,5 +1,6 @@
 package logic.actions;
 
+import engine.Card;
 import engine.Player;
 import logic.actions.actionTypes.PlayCardAction;
 import logic.gameFlow.Game;
@@ -10,6 +11,11 @@ public class ActionExecutor {
 
     public ActionExecutor(Game game) {
         this.game = game;
+    }
+
+    public void executeAuto(Player player) {
+        Card card = player.showHands().get(0);
+        execute(new PlayCardAction(player, card));
     }
 
     public void execute(Action action) {

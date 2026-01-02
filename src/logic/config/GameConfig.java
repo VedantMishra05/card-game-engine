@@ -1,14 +1,18 @@
 package logic.config;
 
+import logic.strategy.deal.DealStrategy;
+
 public final class GameConfig {
     private final RoundRuleType roundRuleType;
     private final int cardsPerRound;
     private final PlayMode playMode;
+    private final DealStrategy strategy;
 
     private GameConfig(Builder builder) {
         this.roundRuleType = builder.roundRuleType;
         this.cardsPerRound = builder.cardsPerRound;
         this.playMode = builder.playMode;
+        this.strategy = builder.strategy;
     }
 
     public RoundRuleType getRoundRuleType() {
@@ -23,6 +27,10 @@ public final class GameConfig {
         return playMode;
     }
 
+    public DealStrategy getDealStrategy() {
+        return strategy;
+    }
+
     public static Builder builder() {
         return new Builder();
     }
@@ -32,6 +40,7 @@ public final class GameConfig {
         private RoundRuleType roundRuleType;
         private int cardsPerRound = 1;
         private PlayMode playMode = PlayMode.AUTO;
+        private DealStrategy strategy;
 
         public Builder roundRuleType(RoundRuleType type) {
             this.roundRuleType = type;
@@ -43,6 +52,11 @@ public final class GameConfig {
         }
         public Builder playMode(PlayMode mode) {
             this.playMode = mode;
+            return this;
+        }
+
+        public Builder dealingStrategy(DealStrategy strategy) {
+            this.strategy = strategy;
             return this;
         }
 

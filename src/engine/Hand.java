@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class Hand {
-    private static final int HAND_SIZE_LIMIT = 5;
+    // private static final int HAND_SIZE_LIMIT = 5;
     // private final int handSize;
     private final List<Card> cardsInHand = new ArrayList<>();
 
@@ -14,12 +14,12 @@ public class Hand {
     }
 
     public void addCard(Card card) {
-        if(cardsInHand.size() >= HAND_SIZE_LIMIT) {throw new IllegalStateException("Hand is full!");}
+        // if(cardsInHand.size() >= HAND_SIZE_LIMIT) {throw new IllegalStateException("Hand is full!");}
         cardsInHand.add(card);
     }
 
     public void drawFrom(Deck deck) {
-        if(cardsInHand.size() >= HAND_SIZE_LIMIT) {throw new IllegalStateException("Hand is full!");}
+        // if(cardsInHand.size() >= HAND_SIZE_LIMIT) {throw new IllegalStateException("Hand is full!");}
         cardsInHand.add(deck.draw());
     }
 
@@ -27,9 +27,13 @@ public class Hand {
         return cardsInHand.contains(card);
     }
 
-    public boolean isFull() {
-        return cardsInHand.size() == HAND_SIZE_LIMIT;
+    public boolean isEmpty() {
+        return cardsInHand.size() == 0;
     }
+    
+    // public boolean isFull() {
+    //     return cardsInHand.size() == HAND_SIZE_LIMIT;
+    // }
 
     public void removeCard(Card card) {
         if(!(cardsInHand.remove(card))) {

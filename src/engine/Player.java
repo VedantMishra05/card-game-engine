@@ -21,9 +21,9 @@ public class Player {
         return card;
     }
 
-    public boolean isHandFull() {
-        return hand.isFull();
-    }
+    // public boolean isHandFull() {
+    //     return hand.isFull();
+    // }
 
     public List<Card> showHands() {
         return Collections.unmodifiableList(hand.getCards());

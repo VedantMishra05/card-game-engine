@@ -5,11 +5,10 @@ import engine.Player;
 import engine.util.Sleep;
 import logic.config.GameConfig;
 import logic.config.PlayMode;
-import logic.config.RoundRuleType;
-import logic.config.userInput.RuleFactory;
 import logic.events.EventBus;
 import logic.gameFlow.Game;
 import ui.console.ConsoleController;
+import ui.console.ConsoleGameModeSelector;
 import ui.console.ConsoleLogger;
 
 public class App {
@@ -61,16 +60,9 @@ public class App {
         new ConsoleLogger(eventBus);
 
         // Input for which game mode..
-        RuleFactory.displayRules();
-        RoundRuleType roundRuleType = RuleFactory.getUserChoice(sc);
-        // RoundRule roundRule = RuleFactory.createRule(ruleChoice);
 
         // config
-        GameConfig config = GameConfig.builder().
-            roundRuleType(roundRuleType).
-            cardsPerRound(1).
-            playMode(PlayMode.AUTO).
-            build();
+        GameConfig config = ConsoleGameModeSelector.selectGameConfig(sc);
 
         // User input for number of shuffles
         int shuffleCount = shuffleCount(sc);

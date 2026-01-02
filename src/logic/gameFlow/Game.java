@@ -2,12 +2,10 @@ package logic.gameFlow;
 
 import java.util.List;
 
-import engine.Card;
 import engine.Deck;
 import engine.Player;
 import logic.GameState;
 import logic.actions.ActionExecutor;
-import logic.actions.actionTypes.PlayCardAction;
 import logic.config.GameConfig;
 import logic.config.PlayMode;
 import logic.events.EventBus;
@@ -27,7 +25,6 @@ public class Game {
     private final ActionExecutor actionExecutor;
 
     private GameState state = GameState.SETUP;
-
     private int roundNumber = 1;
     private int currentTurnIndex = 0;
     private Round currentRound;
@@ -56,40 +53,32 @@ public class Game {
         state = GameState.IN_PROGRESS;
         eventBus.publish(new GameStartedEvent());
 
+        config.getDealStrategy().deal(deck, players);
+
         startNextRound();
     }
 
     private void startNextRound() {
-        if(!canPlayRound()) {
+        if(!playersCanPlay()) {
             endGame();
             return;
         }
 
-        int cardsPerRound = config.getCardsPerRound();
-        for(int i = 0; i < cardsPerRound; i++) {
-            for(Player player: players) {
-                Card drawn = deck.draw();
-                player.receiveCard(drawn);
-            }
-        }
-
-        currentRound = new Round(roundNumber++, players, ruleResolver.resolve(config), eventBus);
         currentTurnIndex = 0;
+        currentRound = new Round(roundNumber++, players, ruleResolver.resolve(config), eventBus);
         currentRound.start();
 
-        if(config.getPlayMode() == PlayMode.AUTO) autoPlayROund();
+        if(config.getPlayMode() == PlayMode.AUTO) autoPlayRound();
     }
 
-    private void autoPlayROund() {
+    private void autoPlayRound() {
         for(Player player: players) {
-            Card card = player.showHands().get(0);
-            
-            actionExecutor.execute(new PlayCardAction(player, card));
+            actionExecutor.executeAuto(player);
         }
     }
 
-    private boolean canPlayRound() {
-        return deck.remainingCards() >= players.size();
+    private boolean playersCanPlay() {
+        return players.stream().allMatch(p -> !p.getHand().isEmpty());
     }
     
     private void endGame() {
@@ -102,9 +91,9 @@ public class Game {
     }
 
     public Round getRound() { return currentRound; }
-    public ActionExecutor getActionExecutor() { return actionExecutor; }
     public Player getCurrentTurnPlayer() { return players.get(currentTurnIndex); }
     public void advanceTurn() {
         currentTurnIndex = (currentTurnIndex + 1) % players.size(); // shayad formula galat ho jaaye..
     }
+    public ActionExecutor getActionExecutor() { return actionExecutor; }
 }
